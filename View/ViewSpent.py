@@ -15,7 +15,6 @@ class ViewSpent:
         self.form.geometry("1000x1000")
         self.initComponents()
 
-
     def initComponents(self):
         self.control = CtSpent()
         self.cal = Calendar(self.form)
@@ -38,8 +37,59 @@ class ViewSpent:
         name = self.nombre.get()
         amount = self.amount.get()
         observation = self.observation.get()
-        self.control.addSpent()
+        self.control.addSpent(name, dateNow, typeSpent, amount, observation)
 
+    def updateTable(self):
+        self.tree.delete(*self.tree.get_children())
+        self.tree.heading('#1', text='ID')
+        self.tree.heading('#2', text='Nombre')
+        self.tree.heading('#3', text='Tipo')
+        self.tree.heading('#4', text='Fecha')
+        self.tree.heading('#5', text='Cantidad')
+        self.tree.heading('#6', text='Observación')
+        self.tree.bind('<<TreeviewSelect>>', self.item_selected)
+        listSpent = self.control.getAllSpent()
+        for gasto in listSpent:
+            self.tree.insert('', 'end',
+                             values=(
+                                 gasto.id, gasto.name, gasto.typeSpentName, gasto.date, gasto.amount,
+                                 gasto.observation))
+
+        # Ajustar las columnas
+        for col in ('#1', '#2', '#3', '#4', '#5', '#6'):
+            self.tree.column(col, anchor='center')
+        scrollbar = ttk.Scrollbar(self.form, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=scrollbar.set)
+        # Mostrar la tabla
+        self.tree.grid(row=7, column=10, padx=25, pady=15)
+
+
+    def getAllSpent(self):
+        operationOption = ["ELIMINAR", "COPIAR"]
+        self.comboBoxTypeOperation["values"] = operationOption
+        tk.Label(self.form, text="Operacion:").grid(row=5, column=10)
+        self.comboBoxTypeOperation.grid(row=6, column=10)
+
+        self.tree.heading('#1', text='ID')
+        self.tree.heading('#2', text='Nombre')
+        self.tree.heading('#3', text='Tipo')
+        self.tree.heading('#4', text='Fecha')
+        self.tree.heading('#5', text='Cantidad')
+        self.tree.heading('#6', text='Observación')
+        self.tree.bind('<<TreeviewSelect>>', self.item_selected)
+        listSpent = self.control.getAllSpent()
+        for gasto in listSpent:
+            self.tree.insert('', 'end',
+                             values=(
+                             gasto.id, gasto.name, gasto.typeSpentName, gasto.date, gasto.amount, gasto.observation))
+
+        # Ajustar las columnas
+        for col in ('#1', '#2', '#3', '#4', '#5', '#6'):
+            self.tree.column(col, anchor='center')
+        scrollbar = ttk.Scrollbar(self.form, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=scrollbar.set)
+        # Mostrar la tabla
+        self.tree.grid(row=7, column=10, padx=25, pady=15)
 
     def initForm(self):
         tk.Label(self.form, text="Nombre Gasto:").grid(row=0, column=0)
@@ -47,7 +97,8 @@ class ViewSpent:
         self.nombre.grid(row=0, column=1)
 
         tk.Label(self.form, text="Tipo Gasto:").grid(row=1, column=0)
-        self.getAllTypeSpent()
+        self.comboBoxType["values"] = self.control.getAllTypeSpent()
+        self.comboBoxType.grid(row=1, column=1)
         tk.Label(self.form, text="Fecha del gasto:").grid(row=2, column=0)
         self.cal = Calendar(self.form)
         self.cal.grid(row=2, column=1)
@@ -61,4 +112,7 @@ class ViewSpent:
 
         boton_enviar = tk.Button(self.form, text="Añadir", command=self.addSpent)
         boton_enviar.grid(row=6, column=0, columnspan=2)
+
+        self.getAllSpent()
+        self.form.mainloop()
 

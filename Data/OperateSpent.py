@@ -20,5 +20,5 @@ class OperateSpent(OperateGeneral):
                                   data.get("observation"))
                 list.append(spent)
         return list
-    def deleteType(self,id):
+    def deleteSpent(self,id):
         self.deleteRegisterCollectionById(self.collectionName,id)

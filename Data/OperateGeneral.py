@@ -2,7 +2,7 @@ import json
 
 
 class OperateGeneral:
-    dataBase = '../bbdd/db.json'
+    dataBase = 'D:/DESARROLLO/REPOSITORY/GASTOSCOMPARTIDOS/bbdd/db.json'
     def readColection(self,collection):
         with open(self.dataBase, 'r') as file:
             file_data = json.load(file)

@@ -1,8 +1,9 @@
 import tkinter as tk
 
+from Control.CtPaysheet import CtPaysheet
 from Control.CtPerson import CtPerson
-from Control.CtSpent import CtSpent
 from Control.CtTypeSpent import CtTypeSpent
+from Control.CtSpent import CtSpent
 
 
 def openSpent():
@@ -16,8 +17,8 @@ def openPerson():
     control.initFormPerson()
 
 def openPaysheet():
-    control=Ct
-    control.initFormPerson()
+    control=CtPaysheet()
+    control.initForm()
 
 main = tk.Tk()
 main.configure(background='#6B97E8')

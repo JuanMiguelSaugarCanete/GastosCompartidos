@@ -30,3 +30,21 @@ class OperatePerson(OperateGeneral):
     def deletePerson(self,id):
         self.deleteRegisterCollectionById(self.collectionName,id)
 
+    def personIdByName(self,name):
+        id = None
+        file_data = self.readColection(self.collectionName)
+        if(len(file_data) > 0):
+            for data in file_data:
+                if(data.get("name") == name):
+                    id = data.get("id")
+        return id
+    def personNameById(self,id):
+        name = None
+        file_data = self.readColection(self.collectionName)
+        if (len(file_data) > 0):
+            for data in file_data:
+                if (data.get("id") == id):
+                    name = data.get("name")
+        return name
+
+
