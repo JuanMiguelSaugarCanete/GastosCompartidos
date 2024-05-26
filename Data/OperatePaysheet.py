@@ -17,4 +17,6 @@ class OperatePaysheet(OperateGeneral):
                 paysheet = Paysheet(data.get("id"),data.get("personId"),data.get("amount"),data.get("date"))
                 list.append(paysheet)
         return list
+    def deletePaysheet(self,id):
+        self.deleteRegisterCollectionById(self.collectionName, id)
 

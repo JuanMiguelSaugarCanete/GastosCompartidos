@@ -1,23 +1,23 @@
 import tkinter as tk
 
-from Control.CtPaysheet import CtPaysheet
-from Control.CtPerson import CtPerson
-from Control.CtTypeSpent import CtTypeSpent
-from Control.CtSpent import CtSpent
+from View.ViewPaysheet import ViewPaysheet
+from View.ViewPerson import ViewPerson
+from View.ViewTypeSpent import ViewTypeSpent
+from View.ViewSpent import ViewSpent
 
 
 def openSpent():
-    control = CtSpent()
-    control.initFormSpent()
+    control = ViewSpent()
+    control.initForm()
 def openTypeSpent():
-    control = CtTypeSpent()
-    control.initFormTypeSpent()
+    control = ViewTypeSpent()
+    control.initForm()
 def openPerson():
-    control=CtPerson()
-    control.initFormPerson()
+    control=ViewPerson()
+    control.initForm()
 
 def openPaysheet():
-    control=CtPaysheet()
+    control=ViewPaysheet()
     control.initForm()
 
 main = tk.Tk()
