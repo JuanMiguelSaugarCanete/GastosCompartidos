@@ -4,8 +4,10 @@ from tkcalendar import Calendar
 from tkinter import ttk, messagebox
 from tkinter import Frame
 from datetime import datetime
+import customtkinter
 
 from Control.CtSpent import CtSpent
+from util.Print import Print
 
 
 class ViewSpent:
@@ -13,9 +15,7 @@ class ViewSpent:
     def __init__(self):
         self.listTypeSpent = []
         self.listSpent = []
-        self.form = tk.Tk()
-        self.form.title("PANEL Gastos")
-        self.form.geometry("1000x1000")
+        self.form = None
         self.control = CtSpent()
         self.initComponents()
 
@@ -54,55 +54,36 @@ class ViewSpent:
         self.control.addSpent(name,typeSpent,dateNow,amount,observation)
         self.updateTable()
     def leftSide(self):
-        left_frame = Frame(self.form, width=900, height=400, background='#6B97E8')
+        printComponent = Print()
+        left_frame = customtkinter.CTkFrame(self.form, width=900, height=400)
         left_frame.grid(row=0, column=0, padx=50, pady=50)
 
-        tk.Label(left_frame, text="Nombre Gasto:").grid(row=0, column=0, padx=10, pady=10)
-        self.nombre = tk.Entry(left_frame)
-        self.nombre.grid(row=0, column=1, padx=10, pady=10)
+        self.nombre = printComponent.entryWhithLabel(left_frame,"Nombre Gasto:",[0,0])
 
-        tk.Label(left_frame, text="Tipo Gasto:").grid(row=1, column=0, padx=10, pady=10)
-        self.comboBoxType = ttk.Combobox(left_frame, state="readonly")
-        self.comboBoxType["values"] = self.control.getAllTypeSpent()
-        self.comboBoxType.grid(row=1, column=1, padx=10, pady=10)
+        self.comboBoxType = printComponent.getComboBoxWhithLabel(left_frame,"Tipo Gasto:",self.control.getAllTypeSpent(),[1,0])
 
-        tk.Label(left_frame, text="Fecha del gasto:").grid(row=2, column=0, padx=10, pady=10)
-        self.cal = Calendar(left_frame)
-        self.cal.grid(row=2, column=1, padx=10, pady=10)
-        tk.Label(left_frame, text="Cantidad:").grid(row=4, column=0, padx=10, pady=10)
-        self.amount = tk.Entry(left_frame)
-        self.amount.grid(row=4, column=1, padx=10, pady=10)
+        self.cal = printComponent.getCalendar(left_frame,[2,1])
 
-        tk.Label(left_frame, text="Observaciones:").grid(row=5, column=0, padx=10, pady=10)
-        self.observation = tk.Entry(left_frame)
-        self.observation.grid(row=5, column=1, padx=10, pady=10)
+        self.amount = printComponent.entryWhithLabel(left_frame,"Cantidad:",[4,0])
 
-        boton_enviar = tk.Button(left_frame, text="Añadir", command=self.add)
-        boton_enviar.grid(row=6, column=0, columnspan=2)
+        self.observation =printComponent.entryWhithLabel(left_frame,"Observaciones:",[5,0])
+
+        printComponent.btnSend(left_frame, "Añadir", self.add, [6, 0])
+
     def rigthSide(self):
-        rigth_frame = Frame(self.form, width=600, height=400, background='purple')
+        rigth_frame = customtkinter.CTkFrame(self.form, width=600, height=400)
         rigth_frame.grid(row=0, column=5, padx=5, pady=5)
 
-        tk.Label(rigth_frame, text="Operacion:").grid(row=0, column=10, padx=25, pady=15)
-        self.comboBoxTypeOperation = ttk.Combobox(rigth_frame, state="readonly")
-        self.comboBoxTypeOperation.grid(row=1, column=10, padx=25, pady=15)
+        printComponent = Print()
         operationOption = ["ELIMINAR", "COPIAR"]
-        self.comboBoxTypeOperation["values"] = operationOption
-
-        self.tree = Treeview(rigth_frame, columns=('ID', 'Nombre', 'Tipo', 'Fecha', 'Cantidad', 'Observación'))
-        self.tree.heading('#1', text='ID')
-        self.tree.heading('#2', text='Nombre')
-        self.tree.heading('#3', text='Tipo')
-        self.tree.heading('#4', text='Fecha')
-        self.tree.heading('#5', text='Cantidad')
-        self.tree.heading('#6', text='Observación')
-        self.tree.bind('<<TreeviewSelect>>', self.item_selected)
+        self.comboBoxTypeOperation = printComponent.getComboBoxWhithLabel(rigth_frame, "Operacion:", operationOption,[0, 10])
+        col = ('ID', 'Nombre', 'Tipo', 'Fecha', 'Cantidad', 'Observación')
+        self.tree = printComponent.getTable(rigth_frame,col,self.item_selected,[2,10])
         self.control.getAllSpent(self.tree)
-        self.tree.grid(row=2, column=10, padx=25, pady=15)
 
-    def initForm(self):
+    def initForm(self,right_Frame):
+        self.form = right_Frame
         self.leftSide()
         self.rigthSide()
-        self.form.mainloop()
 
 

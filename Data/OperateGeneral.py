@@ -1,14 +1,21 @@
 import json
-
+from Configuration.Configuration import Configuration
 
 class OperateGeneral:
-    dataBase = 'D:/DESARROLLO/REPOSITORY/GASTOSCOMPARTIDOS/bbdd/db.json'
+
     def readColection(self,collection):
-        with open(self.dataBase, 'r') as file:
-            file_data = json.load(file)
-            return  file_data['GASTOS'][0][collection]
+        configuration = Configuration()
+        self.dataBase = configuration.configuration["filebbdd"]
+        if(self.dataBase):
+            with open(self.dataBase, 'r') as file:
+                file_data = json.load(file)
+                return file_data['GASTOS'][0][collection]
+
+
 
     def updateColection(self,collection,dicctionary):
+        configuration = Configuration()
+        self.dataBase = configuration.configuration["filebbdd"]
         with open(self.dataBase, 'r+') as file:
             file_data = json.load(file)
             file_dataPerson = file_data['GASTOS'][0][collection]
@@ -17,6 +24,8 @@ class OperateGeneral:
             json.dump(file_data, file)
 
     def deleteRegisterCollectionById(self,collection,id):
+        configuration = Configuration()
+        self.dataBase = configuration.configuration["filebbdd"]
         oldData = None
         with open(self.dataBase, 'r') as file:
             oldData = json.load(file)
